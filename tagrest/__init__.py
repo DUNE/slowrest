@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_restful import Api
 
 
 def create_app(test_config=None):
@@ -34,5 +35,11 @@ def create_app(test_config=None):
     from tagrest import db
 
     db.init_app(app)
+    api = Api(app)
+
+    from tagrest import hash
+    api.add_resource(hash.Hash, "/<string:globaltag>/<string:kind>/<int:runnumber>")
 
     return app
+
+
