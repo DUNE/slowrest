@@ -1,3 +1,8 @@
 from setuptools import setup
 
-setup()
+setup(
+    install_requires=[
+        'flask',
+        'pytest'
+    ]
+)
