@@ -29,4 +29,4 @@ CREATE TABLE lifetime (
 CREATE TABLE payload (
   hash TEXT NOT NULL,
   payload BLOB NOT NULL
-)
+);

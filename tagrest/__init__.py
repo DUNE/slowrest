@@ -37,8 +37,9 @@ def create_app(test_config=None):
     db.init_app(app)
     api = Api(app)
 
-    from tagrest import hash
-    api.add_resource(hash.Hash, "/<string:globaltag>/<string:kind>/<int:runnumber>")
+    from tagrest import resources
+    api.add_resource(resources.Hash, "/<string:globaltag>/<string:kind>/<int:runnumber>")
+    api.add_resource(resources.Payload, "/payload/<string:hash>")
 
     return app
 
