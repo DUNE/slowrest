@@ -1,7 +1,7 @@
-INSERT INTO global_tag_map (global_tag, sce)
+INSERT INTO global_tag_map (global_tag, sce, lifetime)
 VALUES
-  ('1.0', '1.0'),
-  ('2.0', '4.0');
+  ('1.0', '1.0', '1.0'),
+  ('2.0', '4.0', '2.0');
 
 INSERT INTO sce (tag, run_number, hash)
 VALUES
