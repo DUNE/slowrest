@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from tagrest.db import get_db
 from tagrest.sql import queries
+from tagrest.utils import extract_tag_map_from_results
 
 
 class Hash(Resource):
@@ -44,14 +45,3 @@ class GlobalTag(Resource):
         ).fetchone()
         kind_tag_dict = dict(zip(row.keys()[1:], tuple(row[1:])))
         return kind_tag_dict
-
-
-def extract_tag_map_from_results(res):
-    tag_map = {}
-    for row in res:
-        t = tuple(row)
-        try:
-            tag_map[t[0]].append({t[1]: t[2]})
-        except KeyError:
-            tag_map[t[0]] = [{t[1]: t[2]}]
-    return tag_map
