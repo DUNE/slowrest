@@ -1,63 +1,57 @@
 from flask_restful import Resource
 from tagrest.db import get_db
+from tagrest.sql import queries
 
 
 class Hash(Resource):
     def get(self, globaltag, kind, runnumber):
         hash = get_db().execute(
-                "SELECT hash"
-                f" FROM {kind} p JOIN global_tag_map u ON p.tag = u.{kind}"
-                f" WHERE u.global_tag = {globaltag} AND p.run_number = {runnumber}"
-            ).fetchone()
+            queries.hash(globaltag, kind, runnumber)
+        ).fetchone()
         return hash[0]
 
 
 class Payload(Resource):
     def get(self, hash):
         payload = get_db().execute(
-                "SELECT payload"
-                f" FROM payload p WHERE p.hash = '{hash}'"
-            ).fetchone()
+            queries.payload(hash)
+        ).fetchone()
         return payload[0]
-        #return bytes.fromhex(payload[0]).decode('utf-8')
 
 
 class TagMap(Resource):
     def get(self, globaltag):
-        row = get_db().execute(
-                "SELECT *"
-                f" FROM global_tag_map"
-                f" WHERE global_tag_map.global_tag = {globaltag}"
-            ).fetchone()
-        kind_tag_dict = dict(zip(row.keys(), tuple(row)))
-        tag_map = {}
-        for kind, tag in kind_tag_dict.items():
-            if kind == 'id' or kind =='global_tag':
-                continue
-            tag_map[kind] = []
-            sub_row = get_db().execute(
-                "SELECT *"
-                f" FROM {kind}"
-                f" WHERE {kind}.tag = {tag}"
-            ).fetchall()
-            for sr in sub_row:
-                t = tuple(sr)
-                tag_map[kind].append({t[1]: t[2]})
-        return tag_map
+        kind_tag_dict = GlobalTag.get(globaltag)
+        res = get_db().execute(
+            queries.tag_map(kind_tag_dict)
+        )
+        return extract_tag_map_from_results(res)
 
 
 class FastTagMap(Resource):
     def get(self, globaltag):
         res = get_db().execute(
-            "SELECT h.kind, run_number, hash"
-            f" FROM global_tag_map_new g JOIN hash_map h ON g.tag=h.tag"
-            f" WHERE g.global_tag = {globaltag}"
+            queries.fast_tag_map(globaltag)
         )
-        tag_map = {}
-        for row in res:
-            t = tuple(row)
-            try:
-                tag_map[t[0]].append({t[1]:t[2]})
-            except KeyError:
-                tag_map[t[0]] = [{t[1]: t[2]}]
-        return tag_map
+        return extract_tag_map_from_results(res)
+
+
+class GlobalTag(Resource):
+    @staticmethod
+    def get(globaltag):
+        row = get_db().execute(
+            queries.global_tag(globaltag)
+        ).fetchone()
+        kind_tag_dict = dict(zip(row.keys()[1:], tuple(row[1:])))
+        return kind_tag_dict
+
+
+def extract_tag_map_from_results(res):
+    tag_map = {}
+    for row in res:
+        t = tuple(row)
+        try:
+            tag_map[t[0]].append({t[1]: t[2]})
+        except KeyError:
+            tag_map[t[0]] = [{t[1]: t[2]}]
+    return tag_map

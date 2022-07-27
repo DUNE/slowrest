@@ -1,3 +1,4 @@
+from datetime import datetime
 from tagrest import create_app
 
 
@@ -31,13 +32,27 @@ def test_tag_map(client):
     assert response.json
 
 
+def test_global_tag(client):
+    response = client.get("/globaltag/2.0")
+    print(f'response.json = {response.json}')
+    assert response.json == {'sce': '4.0', 'lifetime': '2.0'}
+
+
 def test_fast_tag_map(client):
     response = client.get("/fasttagmap/2.0")
     print(f'response.json = {response.json}')
     assert response.json
 
 
+def test_fast_and_slow_tag_map(client):
+    assert client.get("/tagmap/2.0").json == client.get("/fasttagmap/2.0").json
+
+
 def test_fast_vs_slow_tag_map(client):
-    fast_response = client.get("/tagmap/2.0")
-    slow_response = client.get("/fasttagmap/2.0")
+    t_0 = datetime.now()
+    slow_response = client.get("/tagmap/2.0")
+    print(f'slow resp took {datetime.now()-t_0}')
+    t_0 = datetime.now()
+    fast_response = client.get("/fasttagmap/2.0")
+    print(f'fast resp took {datetime.now()-t_0}')
     assert fast_response.json == slow_response.json

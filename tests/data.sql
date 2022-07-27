@@ -6,8 +6,8 @@ VALUES
 INSERT INTO global_tag_map_new (global_tag, kind, tag)
 VALUES
   ('1.0', 'sce', '1.0'),
-  ('2.0', 'sce', '4.0'),
   ('1.0', 'lifetime', '1.0'),
+  ('2.0', 'sce', '4.0'),
   ('2.0', 'lifetime', '2.0');
 
 INSERT INTO hash_map (kind, tag, run_number, hash)

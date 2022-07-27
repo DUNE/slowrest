@@ -43,6 +43,8 @@ def create_app(test_config=None):
     api.add_resource(resources.Payload, "/payload/<string:hash>")
     api.add_resource(resources.TagMap, "/tagmap/<string:globaltag>")
     api.add_resource(resources.FastTagMap, "/fasttagmap/<string:globaltag>")
+    api.add_resource(resources.GlobalTag, "/globaltag/<string:globaltag>")
+
 
     return app
 
