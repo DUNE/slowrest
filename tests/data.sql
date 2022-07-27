@@ -24,7 +24,7 @@ VALUES
 
 INSERT INTO payload (hash, payload)
 VALUES
-  ('dasflksad', 0),
+  ('dasflksad', hex('1.542007e+09   94.606321  33.542739  4.918960e+02')),
   ('asdopsiau', 1),
   ('uiyadanko', 2),
   ('opiuasdnn', 0),

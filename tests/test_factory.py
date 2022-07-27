@@ -21,4 +21,5 @@ def test_hash(client):
 
 def test_payload(client):
     response = client.get("/payload/dasflksad")
-    assert response.data == b'0\n'
+    decoded = bytes.fromhex(str(response.json)).decode('utf-8')
+    assert decoded == '1.542007e+09   94.606321  33.542739  4.918960e+02'

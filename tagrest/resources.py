@@ -19,3 +19,4 @@ class Payload(Resource):
                 f" FROM payload p WHERE p.hash = '{hash}'"
             ).fetchone()
         return payload[0]
+        #return bytes.fromhex(payload[0]).decode('utf-8')
