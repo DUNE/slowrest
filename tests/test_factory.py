@@ -23,3 +23,21 @@ def test_payload(client):
     response = client.get("/payload/dasflksad")
     decoded = bytes.fromhex(str(response.json)).decode('utf-8')
     assert decoded == '1.542007e+09   94.606321  33.542739  4.918960e+02'
+
+
+def test_tag_map(client):
+    response = client.get("/tagmap/2.0")
+    print(f'response.json = {response.json}')
+    assert response.json
+
+
+def test_fast_tag_map(client):
+    response = client.get("/fasttagmap/2.0")
+    print(f'response.json = {response.json}')
+    assert response.json
+
+
+def test_fast_vs_slow_tag_map(client):
+    fast_response = client.get("/tagmap/2.0")
+    slow_response = client.get("/fasttagmap/2.0")
+    assert fast_response.json == slow_response.json

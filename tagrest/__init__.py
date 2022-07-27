@@ -11,7 +11,7 @@ def create_app(test_config=None):
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",
         # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, "tagrest.postgres"),
+        DATABASE=os.path.join(app.instance_path, "tagrest.sqlite"),
     )
 
     if test_config is None:
@@ -41,6 +41,8 @@ def create_app(test_config=None):
     from tagrest import resources
     api.add_resource(resources.Hash, "/hash/<string:globaltag>/<string:kind>/<int:runnumber>")
     api.add_resource(resources.Payload, "/payload/<string:hash>")
+    api.add_resource(resources.TagMap, "/tagmap/<string:globaltag>")
+    api.add_resource(resources.FastTagMap, "/fasttagmap/<string:globaltag>")
 
     return app
 
