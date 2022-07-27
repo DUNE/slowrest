@@ -38,7 +38,7 @@ def create_app(test_config=None):
     api = Api(app)
 
     from tagrest import resources
-    api.add_resource(resources.Hash, "/<string:globaltag>/<string:kind>/<int:runnumber>")
+    api.add_resource(resources.Hash, "/hash/<string:globaltag>/<string:kind>/<int:runnumber>")
     api.add_resource(resources.Payload, "/payload/<string:hash>")
 
     return app

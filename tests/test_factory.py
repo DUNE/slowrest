@@ -13,9 +13,9 @@ def test_hello(client):
 
 
 def test_hash(client):
-    response = client.get("/1.0/sce/5844")
+    response = client.get("/hash/1.0/sce/5844")
     assert response.data == b'"/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV.root"\n'
-    response = client.get("/2.0/sce/5844")
+    response = client.get("/hash/2.0/sce/5844")
     assert response.data == b'"/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV_v4.root"\n'
 
 
