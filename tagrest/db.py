@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 import click
 from flask import current_app
@@ -46,9 +47,20 @@ def init_db_command():
     click.echo("Initialized the database.")
 
 
+@click.command("fill-db")
+@with_appcontext
+def fill_db_command():
+    """Clear existing data and create new tables."""
+    with open(os.path.join(os.path.dirname(__file__), "../tests/data.sql"), "rb") as f:
+        _data_sql = f.read().decode("utf8")
+    get_db().executescript(_data_sql)
+    click.echo("Populated the database.")
+
+
 def init_app(app):
     """Register database functions with the Flask app. This is called by
     the application factory.
     """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(fill_db_command)
