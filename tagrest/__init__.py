@@ -39,11 +39,14 @@ def create_app(test_config=None):
     api = Api(app)
 
     from tagrest import resources
-    api.add_resource(resources.Hash, "/hash/<string:globaltag>/<string:kind>/<int:runnumber>")
-    api.add_resource(resources.Payload, "/payload/<string:hash>")
+    api.add_resource(resources.Hash, "/hash/<string:kind>/<string:tag>/<int:runnumber>", methods=("GET", "POST"))
+    api.add_resource(resources.Payload, "/payload/<string:hash>", methods=("GET", "POST"))
     api.add_resource(resources.TagMap, "/tagmap/<string:globaltag>")
+    api.add_resource(resources.GlobalTag, "/globaltag/<string:globaltag>", methods=("GET", "POST"))
+
+    ################## EXPERIMENTAL ##################
     api.add_resource(resources.FastTagMap, "/fasttagmap/<string:globaltag>")
-    api.add_resource(resources.GlobalTag, "/globaltag/<string:globaltag>")
+    api.add_resource(resources.Test, "/test")
 
 
     return app

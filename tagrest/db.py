@@ -17,7 +17,6 @@ def get_db():
             current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
         )
         g.db.row_factory = sqlite3.Row
-
     return g.db
 
 
@@ -26,7 +25,6 @@ def close_db(e=None):
     connection.
     """
     db = g.pop("db", None)
-
     if db is not None:
         db.close()
 
@@ -34,15 +32,20 @@ def close_db(e=None):
 def init_db():
     """Clear existing data and create new tables."""
     db = get_db()
-
     with current_app.open_resource("sql/schema.sql") as f:
+        db.executescript(f.read().decode("utf8"))
+
+
+def fill_db():
+    """Populate DB with example data"""
+    db = get_db()
+    with open(os.path.join(os.path.dirname(__file__), "../tests/data.sql"), "rb") as f:
         db.executescript(f.read().decode("utf8"))
 
 
 @click.command("init-db")
 @with_appcontext
 def init_db_command():
-    """Clear existing data and create new tables."""
     init_db()
     click.echo("Initialized the database.")
 
@@ -50,10 +53,7 @@ def init_db_command():
 @click.command("fill-db")
 @with_appcontext
 def fill_db_command():
-    """Clear existing data and create new tables."""
-    with open(os.path.join(os.path.dirname(__file__), "../tests/data.sql"), "rb") as f:
-        _data_sql = f.read().decode("utf8")
-    get_db().executescript(_data_sql)
+    fill_db()
     click.echo("Populated the database.")
 
 
