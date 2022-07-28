@@ -28,8 +28,9 @@ def test_payload(client):
 
 def test_tag_map(client):
     response = client.get("/tagmap/2.0")
-    print(f'response.json = {response.json}')
-    assert response.json
+    tag_map = response.json
+    print(f'tag_map = {tag_map}')
+    assert tag_map['lifetime']['5843'] == 'opiuasdnn'
 
 
 def test_global_tag(client):

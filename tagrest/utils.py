@@ -3,7 +3,7 @@ def extract_tag_map_from_results(res):
     for row in res:
         t = tuple(row)
         try:
-            tag_map[t[0]].append({t[1]: t[2]})
+            tag_map[t[0]][t[1]] = t[2]
         except KeyError:
-            tag_map[t[0]] = [{t[1]: t[2]}]
+            tag_map[t[0]] = {t[1]: t[2]}
     return tag_map
