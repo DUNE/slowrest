@@ -67,7 +67,12 @@ table and accessed through its hash. The de-serialization must
 happen on the client side
 * ```$ curl http://localhost:5000/payload/<string:hash>```
 * GET and POST
-    
+
+Instead of ```curl```, the resources can also be accessed
+via the python module ```requests```. Check the testing code
+in the ```tests/``` folder for examples.
+
+
 #### tag map
 * For a given global tag, this maps every kind of conditions data
 for every run number to the hash of the corresponding payload
@@ -96,6 +101,8 @@ Run it via gunicorn
 gunicorn --workers=1 tagrest:app -b 0.0.0.0:5000 --worker-class=gevent
 ```
 
-
 ### Design choices
+to be written
+
+### Future Plans
 to be written
