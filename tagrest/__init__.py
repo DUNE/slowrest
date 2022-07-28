@@ -48,7 +48,6 @@ def create_app(test_config=None):
     api.add_resource(resources.FastTagMap, "/fasttagmap/<string:globaltag>")
     api.add_resource(resources.Test, "/test")
 
-
     return app
 
 

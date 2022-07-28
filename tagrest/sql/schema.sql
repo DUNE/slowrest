@@ -2,10 +2,12 @@
 -- Drop any existing data and create empty tables.
 
 DROP TABLE IF EXISTS global_tag_map;
-DROP TABLE IF EXISTS hash_map;
 DROP TABLE IF EXISTS sce;
 DROP TABLE IF EXISTS lifetime;
 DROP TABLE IF EXISTS payload;
+
+DROP TABLE IF EXISTS global_tag_map_new;
+DROP TABLE IF EXISTS hash_map;
 
 
 CREATE TABLE global_tag_map (
