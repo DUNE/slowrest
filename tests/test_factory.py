@@ -23,7 +23,7 @@ def test_hash(client):
 def test_payload(client):
     response = client.get("/payload/dasflksad")
     decoded = bytes.fromhex(str(response.json)).decode('utf-8')
-    assert decoded == '1.542007e+09   94.606321  33.542739  4.918960e+02'
+    assert decoded == '1.542007e+09  94.606321  33.542739  4.918960e+02'
 
 
 def test_tag_map(client):
@@ -34,13 +34,13 @@ def test_tag_map(client):
 
 def test_global_tag(client):
     response = client.get("/globaltag/2.0")
-    print(f'response.json = {response.json}')
+    #print(f'response.json = {response.json}')
     assert response.json == {'sce': '4.0', 'lifetime': '2.0'}
 
 
 def test_fast_tag_map(client):
     response = client.get("/fasttagmap/2.0")
-    print(f'response.json = {response.json}')
+    #print(f'response.json = {response.json}')
     assert response.json
 
 
@@ -71,8 +71,8 @@ def test_post_hash(client):
     assert response.json == test_hash
 
 
-def test_test(client):
-    response = client.get("/test")
-    print(f'response.json = {response.json}')
+#def test_test(client):
+#    response = client.get("/test")
+#    print(f'response.json = {response.json}')
 
 
