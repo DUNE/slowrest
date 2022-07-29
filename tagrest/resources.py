@@ -3,6 +3,13 @@ from flask import request
 from tagrest.db import get_db
 from tagrest.sql import queries
 from tagrest.utils import extract_tag_map_from_results
+from tagrest import cache
+
+
+class Index(Resource):
+    @staticmethod
+    def get():
+        return "Welcome to tagrest!"
 
 
 class Hash(Resource):
@@ -39,6 +46,7 @@ class TagMap(Resource):
 
 class GlobalTag(Resource):
     @staticmethod
+    @cache.cached(timeout=300)
     def get(globaltag):
         row = get_db().execute(
             queries.Get.global_tag(globaltag)

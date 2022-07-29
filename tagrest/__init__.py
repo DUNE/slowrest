@@ -1,7 +1,9 @@
 import os
-
 from flask import Flask
 from flask_restful import Api
+from flask_caching import Cache
+
+cache = Cache()
 
 
 def create_app(test_config=None):
@@ -27,18 +29,17 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route("/hello")
-    def hello():
-        return "Hello, World!"
-
     # register the database commands
     from tagrest import db
-
     db.init_app(app)
+
+    # configure cache
+    cache.init_app(app, config={"CACHE_TYPE": "SimpleCache", "CACHE_DEFAULT_TIMEOUT": 300})
 
     api = Api(app)
 
     from tagrest import resources
+    api.add_resource(resources.Index, "/")
     api.add_resource(resources.Hash, "/hash/<string:kind>/<string:tag>/<int:runnumber>", methods=("GET", "POST"))
     api.add_resource(resources.Payload, "/payload/<string:hash>", methods=("GET", "POST"))
     api.add_resource(resources.TagMap, "/tagmap/<string:globaltag>")

@@ -9,15 +9,15 @@ def test_config():
 
 
 def test_hello(client):
-    response = client.get("/hello")
-    assert response.data == b"Hello, World!"
+    response = client.get("/")
+    assert response.json == "Welcome to tagrest!"
 
 
 def test_hash(client):
     response = client.get("/hash/sce/1.0/5844")
-    assert response.data == b'"/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV.root"\n'
+    assert response.json == "/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV.root"
     response = client.get("/hash/sce/4.0/5844")
-    assert response.data == b'"/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV_v4.root"\n'
+    assert response.json == "/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV_v4.root"
 
 
 def test_payload(client):

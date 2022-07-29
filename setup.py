@@ -4,6 +4,7 @@ setup(
     install_requires=[
         'flask',
         'flask_restful',
+        'flask_caching',
         'pytest',
         'click',
         'wheel'
