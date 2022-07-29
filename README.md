@@ -1,7 +1,7 @@
 ## Welcome to tagrest!
 ### Table of contents
 * [Introduction](#introduction)
-* [Setup Locally](#setup)
+* [Setup](#setup)
 * [Usage](#usage)
 * [Deployment](#deployment)
 * [Design Choices](#designchoices)
@@ -17,7 +17,7 @@ The client can directly access the data via http requests
 client side python API that was developed for this purpose
 (https://gitlab.cern.ch/ligerlac/tagface).
 
-### Setup Locally
+### Setup
 Check out the code:
 ```
 $ ssh://git@gitlab.cern.ch:7999/ligerlac/tagrest.git
@@ -51,39 +51,47 @@ In case the ```flask``` command does not work, consider replacing it by
 ### Usage
 Several resources are available. Some of them correspond more or
 less to an actual entry in the DB and have POST and GET methods,
-while the more complicate composite ones are GET-only. The
-following listing assumes the app running on ```localhost```
-on port ```5000```.
+while the more complicate composite ones are GET-only. The examples
+in the following listing assume the app running on ```localhost```
+on port ```5000``` and the DB being populated with toy data as
+mentioned in [Setup](#setup).
 
-#### global tag
-* Maps to one tag for each kind of conditions data
-* ```$ curl http://localhost:5000/globaltag/<string:globaltag>"```
+#### global tag (```/globaltag/{string:globaltag}```)
+* Maps to one tag for each kind of conditions data for a given global tag
 * GET and POST
+* Example: ```$ curl http://localhost:5000/globaltag/2.0```
 
-#### hash
+#### hash (```/hash/{string:kind}/{string:tag}/{int:runnumber}```)
 * Unique identifier for each payload as a function of the kind
 and tag of the conditions data as well as the run number.
 In case the payload is stored in a file, the hash is the full path
-* ```$ curl http://localhost:5000/hash/<string:kind>/<string:tag>/<int:runnumber>", methods=("GET", "POST"))```
 * GET and POST
+* Example: ```$ curl http://localhost:5000/hash/lifetime/2.0/5844```
 
-#### payload
+#### payload (```/payload/{string:hash}```)
 * Contains the actual data. Stored serialized in a dedicated
-table and accessed through its hash. The de-serialization must
+table and accessed through its hash. The (de-)serialization must
 happen on the client side
-* ```$ curl http://localhost:5000/payload/<string:hash>```
 * GET and POST
+* Example: ```$ curl http://localhost:5000/payload/posadiubb```
+
+#### tag map (```/tagmap/{string:globaltag}```)
+* For a given global tag, this maps every kind of conditions data
+for every run number to the hash of the corresponding payload
+* GET-ONLY
+* Example: ```$ curl http://localhost:5000/tagmap/2.0")```
 
 Instead of ```curl```, the resources can also be accessed
 via the python module ```requests```. Check the testing code
 in the ```tests/``` folder for examples.
 
+For read-only applications, the client would first retrieve the
+**tag map** for a given global tag. Then, this mapping is parsed
+locally to get the hash of the desired payload for a given kind
+of conditions data and run number. The actual conditions data is
+then retrieved via the **payload** resource. This way, only two
+resources are accessed and DB queries are reduced to a minimum.
 
-#### tag map
-* For a given global tag, this maps every kind of conditions data
-for every run number to the hash of the corresponding payload
-* ```$ curl http://localhost:5000/tagmap/<string:globaltag>")```
-* GET-ONLY
 
 ### Deployment
 Assuming a suitable web server (e.g. Apache or nginx) is running
@@ -92,7 +100,7 @@ following steps.
 ```
 python setup.py bdist_wheel
 ```
-Copy that file to the designated server
+Copy the output to the designated server
 ```
 scp dist/tagrest-1.0.0-py3-none-any.whl <user>@<ip>:/<dest>/
 ```
