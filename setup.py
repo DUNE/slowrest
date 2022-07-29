@@ -5,8 +5,7 @@ setup(
         'flask',
         'flask_restful',
         'pytest',
-        'sqlite3',
         'click',
-        'bdist_wheel'
+        'wheel'
     ]
 )
