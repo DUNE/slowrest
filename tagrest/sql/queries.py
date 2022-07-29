@@ -53,6 +53,11 @@ class Post:
                f"VALUES" \
                f"  ({tag}, {rn}, {hash})"
 
+    @staticmethod
+    def payload(hash, payload):
+        return f"INSERT INTO payload (hash, payload)" \
+               f"VALUES" \
+               f"  ('{hash}', '{payload}')"
 
 ################## EXPERIMENTAL ##################
 

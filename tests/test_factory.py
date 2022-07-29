@@ -29,7 +29,7 @@ def test_payload(client):
 def test_tag_map(client):
     response = client.get("/tagmap/2.0")
     tag_map = response.json
-    print(f'tag_map = {tag_map}')
+    #print(f'tag_map = {tag_map}')
     assert tag_map['lifetime']['5843'] == 'opiuasdnn'
 
 
@@ -66,10 +66,18 @@ def test_post_global_tag(client):
 
 
 def test_post_hash(client):
-    test_hash = 'fjklhnkmb'
-    client.post("/hash/sce/1.0/5846", json=test_hash)
+    _hash = 'fjklhnkmb'
+    client.post("/hash/sce/1.0/5846", json=_hash)
     response = client.get("/hash/sce/1.0/5846")
-    assert response.json == test_hash
+    assert response.json == _hash
+
+
+def test_post_payload(client):
+    _hash = 'fjklhnkmb'
+    _payload = '1.541587e+09  39.686640  22.506454  60.009939'.encode('utf-8').hex()
+    client.post(f"/payload/{_hash}", json=_payload)
+    response = client.get(f"/payload/{_hash}")
+    assert response.json == _payload
 
 
 #def test_test(client):

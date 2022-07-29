@@ -36,9 +36,18 @@ class Payload(Resource):
         ).fetchone()
         return payload[0]
 
+    @staticmethod
+    def post(hash):
+        payload = request.get_json()
+        get_db().executescript(
+            queries.Post.payload(hash, payload)
+        )
+
+
 
 class TagMap(Resource):
     @staticmethod
+    @cache.cached()
     def get(globaltag):
         kind_tag_dict = GlobalTag.get(globaltag)
         res = get_db().execute(
@@ -49,7 +58,7 @@ class TagMap(Resource):
 
 class GlobalTag(Resource):
     @staticmethod
-    @cache.cached(timeout=300)
+    @cache.cached()
     def get(globaltag):
         row = get_db().execute(
             queries.Get.global_tag(globaltag)
@@ -63,8 +72,6 @@ class GlobalTag(Resource):
         get_db().executescript(
             queries.Post.global_tag(globaltag, data)
         )
-
-
 
 
 ################## EXPERIMENTAL ##################
