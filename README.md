@@ -51,7 +51,7 @@ In case the ```flask``` command does not work, consider replacing it by
 ### Usage
 Several resources are available. Some of them correspond more or
 less to an actual entry in the DB and have POST and GET methods,
-while the more complicate composite ones are GET-only. The examples
+while the more complicated composite ones are GET-only. The examples
 in the following listing assume the app running on ```localhost```
 on port ```5000``` and the DB being populated with toy data as
 mentioned in [Setup](#setup).
@@ -79,11 +79,11 @@ happen on the client side
 * For a given global tag, this maps every kind of conditions data
 for every run number to the hash of the corresponding payload
 * GET-ONLY
-* Example: ```$ curl http://localhost:5000/tagmap/2.0")```
+* Example: ```$ curl http://localhost:5000/tagmap/2.0```
 
-Instead of ```curl```, the resources can also be accessed
-via the python module ```requests```. Check the testing code
-in the ```tests/``` folder for examples.
+Check the testing code in the ```tests/``` folder for examples
+on how to access the resources via the python module ```requests```
+instead of ```curl```.
 
 For read-only applications, the client would first retrieve the
 **tag map** for a given global tag. Then, this mapping is parsed
