@@ -18,11 +18,16 @@ client side python API that was developed for this purpose
 (https://gitlab.cern.ch/ligerlac/tagface).
 
 ### Setup Locally
+Check out the code:
+```
+$ ssh://git@gitlab.cern.ch:7999/ligerlac/tagrest.git
+$ cd tagrest/
+```
 Create a virtual environment, activate it and install dependencies
 ```
 $ python -m venv venv/
 $ . venv/bin/activate
-$ pip install requirements.txt
+$ pip install -r requirements.txt
 ```
 Setup flask variables
 ```
@@ -30,6 +35,7 @@ $ export FLASK_APP=tagrest
 $ export FLASK_ENV=development
 ```
 Initialize the DB and fill it with toy data
+(as defined in ```tests/data.sql```).
 ```
 $ flask init-db
 $ flask fill-db
