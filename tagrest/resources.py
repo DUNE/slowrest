@@ -13,7 +13,8 @@ class Index(Resource):
 
 
 class Hash(Resource):
-    def get(self, kind, tag, runnumber):
+    @staticmethod
+    def get(kind, tag, runnumber):
         hash = get_db().execute(
             queries.Get.hash(tag, kind, runnumber)
         ).fetchone()
@@ -28,7 +29,8 @@ class Hash(Resource):
 
 
 class Payload(Resource):
-    def get(self, hash):
+    @staticmethod
+    def get(hash):
         payload = get_db().execute(
             queries.Get.payload(hash)
         ).fetchone()
@@ -36,7 +38,8 @@ class Payload(Resource):
 
 
 class TagMap(Resource):
-    def get(self, globaltag):
+    @staticmethod
+    def get(globaltag):
         kind_tag_dict = GlobalTag.get(globaltag)
         res = get_db().execute(
             queries.Get.tag_map(kind_tag_dict)
