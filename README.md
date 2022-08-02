@@ -20,7 +20,7 @@ client side python API that was developed for this purpose
 ### Setup
 Check out the code:
 ```
-$ ssh://git@gitlab.cern.ch:7999/ligerlac/tagrest.git
+$ git clone ssh://git@gitlab.cern.ch:7999/ligerlac/tagrest.git
 $ cd tagrest/
 ```
 Create a virtual environment, activate it and install dependencies
