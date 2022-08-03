@@ -1,55 +1,19 @@
 -- Initialize the database.
 -- Drop any existing data and create empty tables.
 
-DROP TABLE IF EXISTS global_tag_map;
-DROP TABLE IF EXISTS sce;
-DROP TABLE IF EXISTS lifetime;
-DROP TABLE IF EXISTS payload;
-
-DROP TABLE IF EXISTS global_tag_map_new;
-DROP TABLE IF EXISTS hash_map;
+DROP TABLE IF EXISTS ELEMENT_ID;
+DROP TABLE IF EXISTS VEVENTSCREEN;
 
 
-CREATE TABLE global_tag_map (
+CREATE TABLE ELEMENT_ID (
   --id INTEGER PRIMARY KEY AUTOINCREMENT,
-  global_tag TEXT UNIQUE NOT NULL,
-  sce TEXT NOT NULL,
-  lifetime TEXT NOT NULL
+  ElEMENT_ID INTEGER UNIQUE NOT NULL,
+  ELEMENT_NAME TEXT NOT NULL,
 );
 
-CREATE TABLE sce (
+CREATE TABLE VEVENTSCREEN (
   --id INTEGER PRIMARY KEY AUTOINCREMENT,
-  tag TEXT NOT NULL,
-  run_number INTEGER NOT NULL,
-  hash TEXT NOT NULL
+  ElEMENT_ID INTEGER NOT NULL,
+  TS TIMESTAMP(9) NOT NULL,
+  VALUE_NUMBER BINARY_DOUBLE, NOT NULL,
 );
-
-CREATE TABLE lifetime (
-  --id INTEGER PRIMARY KEY AUTOINCREMENT,
-  tag TEXT NOT NULL,
-  run_number INTEGER NOT NULL,
-  hash TEXT NOT NULL
-);
-
-CREATE TABLE payload (
-  --id INTEGER PRIMARY KEY AUTOINCREMENT,
-  hash TEXT NOT NULL,
-  payload BLOB NOT NULL
-);
-
----------------------------------- EXPERIMENTAL ----------------------------------
-CREATE TABLE global_tag_map_new (
-  --id INTEGER PRIMARY KEY AUTOINCREMENT,
-  global_tag TEXT NOT NULL,
-  kind TEXT NOT NULL,
-  tag TEXT NOT NULL
-);
-
-CREATE TABLE hash_map (
-  --id INTEGER PRIMARY KEY AUTOINCREMENT,
-  kind TEXT NOT NULL,
-  tag TEXT NOT NULL,
-  run_number INTEGER NOT NULL,
-  hash TEXT NOT NULL
-);
-

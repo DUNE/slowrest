@@ -2,5 +2,6 @@ flask
 flask_restful
 flask_caching
 pytest
+cx_Oracle
 click
 wheel

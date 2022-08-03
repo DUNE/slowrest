@@ -1,10 +1,47 @@
 import sqlite3
+import cx_Oracle
 import os
 
 import click
 from flask import current_app
 from flask import g
 from flask.cli import with_appcontext
+import sys
+
+
+if sys.platform.startswith("darwin"):
+    lib_dir = os.path.join(os.environ.get("HOME"), "Downloads", "instantclient_19_8")
+elif sys.platform.startswith("win32"):
+    lib_dir = r"C:\oracle\instantclient_19_9"
+cx_Oracle.init_oracle_client(lib_dir=lib_dir)
+
+
+@classmethod
+def setup_from_config(cls, cfg_file='conf/backend/db_pool.json'):
+    with open(cfg_file) as f:
+        cfg = json.load(f)
+    cls.db_pool = cx_Oracle.SessionPool(cfg['user'], cfg['pass'], cfg['dsn'], cfg['min'], cfg['max'], cfg['increment'],
+                                        threaded=True)
+
+
+@classmethod
+def _prepare_cursor(cls, query, bind_variables):
+    connection = cls.db_pool.acquire()
+    cursor = connection.cursor()
+    cursor.execute(query, bind_variables)
+    return cursor
+
+
+@classmethod
+def perform_query(cls, query, bind_variables, resultset):
+    """query the db and store result in *resultset*"""
+    cursor = cls._prepare_cursor(query, bind_variables)
+    while True:
+        qres = cursor.fetchmany()
+        if not len(qres) == 0:
+            resultset.append(qres)
+        if not qres:
+            break;
 
 
 def get_db():
@@ -13,10 +50,16 @@ def get_db():
     again.
     """
     if "db" not in g:
-        g.db = sqlite3.connect(
-            current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
+#        g.db = sqlite3.connect(
+#            current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
+#        )
+#        g.db.row_factory = sqlite3.Row
+#        db_pool = cx_Oracle.SessionPool(current_app.config["DATABASE"])
+        db_pool = cx_Oracle.SessionPool(user='user', password='pwd', dsn='localhost')
+        g.db = cx_Oracle.connect(
+            current_app.config["DATABASE"], detect_types=cx_Oracle.PARSE_DECLTYPES
         )
-        g.db.row_factory = sqlite3.Row
+        g.db.row_factory = cx_Oracle.Row
     return g.db
 
 

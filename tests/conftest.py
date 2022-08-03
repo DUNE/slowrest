@@ -3,9 +3,9 @@ import tempfile
 
 import pytest
 
-from tagrest import create_app
-from tagrest.db import get_db
-from tagrest.db import init_db
+from slowrest import create_app
+from slowrest.db import get_db
+from slowrest.db import init_db
 
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:

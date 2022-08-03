@@ -1,15 +1,21 @@
 from flask_restful import Resource
 from flask import request
-from tagrest.db import get_db
-from tagrest.sql import queries
-from tagrest.utils import extract_tag_map_from_results
-from tagrest import cache
+from slowrest.db import get_db
+from slowrest.sql import queries
+from slowrest.utils import extract_tag_map_from_results
+from slowrest import cache
 
 
 class Index(Resource):
     @staticmethod
     def get():
-        return "Welcome to tagrest!"
+        return "Welcome to slowrest!"
+
+
+class Day(Resource):
+    @staticmethod
+    def get(day, elId):
+        return 'yo'
 
 
 class Hash(Resource):
@@ -72,23 +78,3 @@ class GlobalTag(Resource):
         get_db().executescript(
             queries.Post.global_tag(globaltag, data)
         )
-
-
-################## EXPERIMENTAL ##################
-
-class FastTagMap(Resource):
-    def get(self, globaltag):
-        res = get_db().execute(
-            queries.Get.fast_tag_map(globaltag)
-        )
-        return extract_tag_map_from_results(res)
-
-
-class Test(Resource):
-    def get(self):
-        res = get_db().execute(
-            queries.test()
-        )
-        for row in res:
-            print(tuple(row))
-        return 1

@@ -8,14 +8,7 @@
 * [Future Plans](#futureplans)
 
 ### Introduction
-This REST-API was developed to effectively handle conditions data, deploying
-a schema very similar to what is described in the HSF white paper
-(https://arxiv.org/abs/1901.05429). At its foundation sits an sqlite database,
-but any RDBMS could be deployed instead with little additional effort.
-The client can directly access the data via http requests
-(see [Usage](#usage)), however, it is recommended to use the dedicated
-client side python API that was developed for this purpose
-(https://gitlab.cern.ch/ligerlac/tagface).
+This read-only REST-API was developed to effectively access the in the DCS-DB.
 
 ### Setup
 Check out the code:
