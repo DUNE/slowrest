@@ -2,4 +2,4 @@
 venv/
 .idea/
 instance/
-slowrest/conf/db.py
+slowrest/config.py
