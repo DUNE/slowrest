@@ -1,7 +1,7 @@
+pytest
 flask
 flask_restful
 flask_caching
-pytest
-cx_Oracle
+oracledb
 click
 wheel

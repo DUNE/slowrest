@@ -1,5 +1,4 @@
-#import sqlite3
-import cx_Oracle
+import oracledb
 
 import pytest
 
@@ -11,7 +10,7 @@ def test_get_close_db(app):
         db = get_db()
         assert db is get_db()
 
-    with pytest.raises(cx_Oracle.ProgrammingError) as e:
+    with pytest.raises(oracledb.ProgrammingError) as e:
         db.execute("SELECT 1")
 
     assert "closed" in str(e.value)
