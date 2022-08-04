@@ -10,20 +10,20 @@ def test_get_close_db(app):
         db = get_db()
         assert db is get_db()
 
-    with pytest.raises(oracledb.ProgrammingError) as e:
+    with pytest.raises(oracledb.InterfaceError) as e:
         db.execute("SELECT 1")
 
-    assert "closed" in str(e.value)
+    assert "DPY-1006: cursor is not open" in str(e.value)
 
 
-def test_init_db_command(runner, monkeypatch):
+def test_test_print_command(runner, monkeypatch):
     class Recorder:
         called = False
 
-    def fake_init_db():
+    def fake_test_print():
         Recorder.called = True
 
-    monkeypatch.setattr("slowrest.db.init_db", fake_init_db)
-    result = runner.invoke(args=["init-db"])
-    assert "Initialized" in result.output
+    monkeypatch.setattr("slowrest.db.test_print", fake_test_print)
+    result = runner.invoke(args=["test-command"])
+    assert "Conducted test command" in result.output
     assert Recorder.called

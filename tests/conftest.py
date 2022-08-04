@@ -5,11 +5,6 @@ import pytest
 
 from slowrest import create_app
 from slowrest.db import get_db
-from slowrest.db import init_db
-
-# read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
-    _data_sql = f.read().decode("utf8")
 
 
 @pytest.fixture
@@ -19,12 +14,6 @@ def app():
     db_fd, db_path = tempfile.mkstemp()
     # create the app with common test config
     app = create_app({"TESTING": True, "DATABASE": db_path})
-
-    # create the database and load test data
-    with app.app_context():
-        init_db()
-        get_db().executescript(_data_sql)
-
     yield app
 
     # close and remove the temporary database
