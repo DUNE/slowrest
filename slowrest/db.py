@@ -9,7 +9,8 @@ from slowrest.config import conn
 def get_db():
     """Connect to the application's configured database. The connection
     is unique for each request and will be reused if this is called
-    again.
+    again. In the future, might want to use a connection pool here
+    for multithreading.
     """
     if "db" not in g:
         c = oracledb.connect(

@@ -13,13 +13,7 @@ def test_hello(client):
     assert response.json == "Welcome to slowrest!"
 
 
-#def test_hash(client):
-#    response = client.get("/hash/sce/1.0/5844")
-#    assert response.json == "/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV.root"
-#    response = client.get("/hash/sce/4.0/5844")
-#    assert response.json == "/cvmfs/dune.opensciencegrid.org/products/dune/dune_pardata/v01_80_00/SpaceChargeProtoDUNE/SCE_DataDriven_180kV_v4.root"
-
-
-
-
-
+def test_day(client):
+    response = client.get("/day/2019-03-10/47894757376282")
+    print(f'response.json = {response.json}')
+    assert response.json
