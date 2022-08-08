@@ -13,40 +13,39 @@ class Index(Resource):
 
 
 class Day(Resource):
+    """returns {'ts_1': value_1, 'ts_2': value_2, ...}"""
     @staticmethod
     @cache.cached()
-    def get(day, sensor_id):
-        print("Day.get()")
+    def get(day, sensor_id) -> dict:
         from_ts = datetime.datetime.strptime(day, '%Y-%m-%d')
         to_ts = from_ts + datetime.timedelta(days=1)
         res = get_db().execute(
             queries.value_pairs_time_range,
             sensor_id=sensor_id, from_ts=from_ts, to_ts=to_ts
         )
-        return Day._get_timestamped_values(res)
+        return Day._get_value_pair_dict(res)
 
     @staticmethod
-    def _get_timestamped_values(query_result):
-        new_vps = []
+    def _get_value_pair_dict(query_result) -> dict:
+        value_pair_dict = {}
         for vp in query_result.fetchall():
             ts = int(datetime.datetime.timestamp(vp[0])*1000)
-            new_vps.append([ts, vp[1]])
-        return new_vps
+            value_pair_dict[ts] = vp[1]
+        return value_pair_dict
 
 
 class SensorDict(Resource):
-    """{'id_1': 'name_1', 'id_2': 'name_2', ...}"""
+    """returns {'id_1': 'name_1', 'id_2': 'name_2', ...}"""
     @staticmethod
     @cache.cached()
     def get() -> dict:
-        print("SensorDict.get()")
         res = get_db().execute(
             queries.sensor_id_name_pairs,
         )
         return SensorDict._get_sensor_dict(res)
 
     @staticmethod
-    def _get_sensor_dict(query_result):
+    def _get_sensor_dict(query_result) -> dict:
         sensor_dict = {}
         for pair in query_result.fetchall():
             sensor_dict[pair[0]] = pair[1]
@@ -55,5 +54,5 @@ class SensorDict(Resource):
 
 class SensorName(Resource):
     @staticmethod
-    def get(sensor_id) -> int:
+    def get(sensor_id) -> str:
         return SensorDict.get()[sensor_id]
