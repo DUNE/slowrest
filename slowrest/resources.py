@@ -2,9 +2,7 @@ from flask_restful import Resource
 from flask import request
 from slowrest.db import get_db
 from slowrest import queries
-#from slowrest.utils import extract_tag_map_from_results
 from slowrest import cache
-#from datetime import datetime
 import datetime
 
 
@@ -16,51 +14,46 @@ class Index(Resource):
 
 class Day(Resource):
     @staticmethod
+    @cache.cached()
     def get(day, sensor_id):
-        from_ts = datetime.date(2019, 4, 20)
-#        from_ts = datetime.datetime(2019, 4, 20, 23, 59, 0)
-        to_ts = datetime.date(2019, 4, 21)
-        print(f'from_ts = {from_ts}')
-        print(f'to_ts = {to_ts}')
-        t_0 = datetime.datetime.now()
+        print("Day.get()")
+        from_ts = datetime.datetime.strptime(day, '%Y-%m-%d')
+        to_ts = from_ts + datetime.timedelta(days=1)
         res = get_db().execute(
-            queries.value_pairs_time_range2,
+            queries.value_pairs_time_range,
             sensor_id=sensor_id, from_ts=from_ts, to_ts=to_ts
         )
-        arr = res.fetchall()
-        print(f'took {datetime.datetime.now() - t_0} sec')
-#        for r in res:
-#            print(f'r = {r}')
-#        print(f'res.fetchall() = {arr}')
-        return 'yo'
+        return Day._get_timestamped_values(res)
+
+    @staticmethod
+    def _get_timestamped_values(query_result):
+        new_vps = []
+        for vp in query_result.fetchall():
+            ts = int(datetime.datetime.timestamp(vp[0])*1000)
+            new_vps.append([ts, vp[1]])
+        return new_vps
+
+
+class SensorDict(Resource):
+    """{'id_1': 'name_1', 'id_2': 'name_2', ...}"""
+    @staticmethod
+    @cache.cached()
+    def get() -> dict:
+        print("SensorDict.get()")
+        res = get_db().execute(
+            queries.sensor_id_name_pairs,
+        )
+        return SensorDict._get_sensor_dict(res)
+
+    @staticmethod
+    def _get_sensor_dict(query_result):
+        sensor_dict = {}
+        for pair in query_result.fetchall():
+            sensor_dict[pair[0]] = pair[1]
+        return sensor_dict
 
 
 class SensorName(Resource):
     @staticmethod
-    def get(sensor_id):
-        res = get_db().execute(
-            queries.sensor_name,
-            sensor_id=sensor_id
-        )
-        print(f'res = {res}')
-        for r in res:
-            print(f'r = {r}')
-        return 'yo'
-
-
-class GlobalTag(Resource):
-    @staticmethod
-    @cache.cached()
-    def get(globaltag):
-        row = get_db().execute(
-            queries.Get.global_tag(globaltag)
-        ).fetchone()
-        kind_tag_dict = dict(zip(row.keys()[1:], tuple(row[1:])))
-        return kind_tag_dict
-
-    @staticmethod
-    def post(globaltag):
-        data = request.get_json()
-        get_db().executescript(
-            queries.Post.global_tag(globaltag, data)
-        )
+    def get(sensor_id) -> int:
+        return SensorDict.get()[sensor_id]

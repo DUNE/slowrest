@@ -15,5 +15,15 @@ def test_hello(client):
 
 def test_day(client):
     response = client.get("/day/2019-03-10/47894757376282")
-    print(f'response.json = {response.json}')
-    assert response.json
+    assert type(response.json) is list
+
+
+def test_sensor_dict(client):
+    response = client.get("/sensor-dict")
+    assert type(response.json) is dict
+
+
+def test_sensor_id(client):
+    sensor_dict = client.get("/sensor-dict").json
+    sensor_name = client.get("/sensor-name/47894757376282").json
+    assert sensor_dict['47894757376282'] == sensor_name
