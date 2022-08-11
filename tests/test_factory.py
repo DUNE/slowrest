@@ -15,7 +15,6 @@ def test_hello(client):
 
 def test_day(client):
     response = client.get("/day/2019-03-10/47894757376282")
-    print(f'response.json = {response.json}')
     assert type(response.json) is dict
 
 

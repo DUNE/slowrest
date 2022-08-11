@@ -1,5 +1,4 @@
 from flask_restful import Resource
-from flask import request
 from slowrest.db import get_db
 from slowrest import queries
 from slowrest import cache
@@ -29,7 +28,8 @@ class Day(Resource):
     def _get_value_pair_dict(query_result) -> dict:
         value_pair_dict = {}
         for vp in query_result.fetchall():
-            ts = int(datetime.datetime.timestamp(vp[0])*1000)
+            dt = vp[0].replace(tzinfo=datetime.timezone.utc)
+            ts = round(dt.timestamp()*1000) # rounded to millisecond
             value_pair_dict[ts] = vp[1]
         return value_pair_dict
 
