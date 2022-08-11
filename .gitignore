@@ -3,3 +3,6 @@ venv/
 .idea/
 instance/
 slowrest/config/conn.py
+slowrest.egg-info/
+build/
+dist/

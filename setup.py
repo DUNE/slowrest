@@ -7,6 +7,7 @@ setup(
         'flask_caching',
         'pytest',
         'click',
+        'oracledb',
         'wheel'
     ]
 )
