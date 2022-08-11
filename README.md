@@ -59,7 +59,7 @@ instead of ```curl```.
 ### Deployment
 Assuming a suitable web server (e.g. Apache or nginx) is running
 and properly configured, the app can be deployed with the
-following steps.
+following steps. On the local (development) machine, run
 ```
 python setup.py bdist_wheel
 ```
@@ -73,13 +73,24 @@ python3 -m venv venv/
 . venv/bin/activate
 pip install slowrest-1.0.0-py3-none-any.whl
 ```
-Run it via gunicorn
+Configure flask app:
 ```
-gunicorn --workers=1 slowrest:app -b 0.0.0.0:5000 --worker-class=gevent
+export FLASK_APP=slowrest
 ```
-
-### Design choices
-to be written
-
-### Future Plans
-to be written
+Generate a secret key via 
+```
+python -c 'import secrets; print(secrets.token_hex())'
+```
+and copy the output to venv/var/slowrest-instance/config.py like so (example string):
+```
+SECRET_KEY = '192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf'
+```
+Install waitress
+```
+pip install waitress
+```
+And run the app:
+```
+waitress-serve --call 'flaskr:create_app'
+```
+Good luck!
