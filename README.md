@@ -47,9 +47,13 @@ Several resources are available:
 * Name of sensor for given id
 * Example: ```$ curl http://localhost:5000/sensor-name/47894774153498```
 
-#### day (```/day/payload/{string:hash}```)
+#### day (```/day/{string:day}/{int:sensor_id}```)
 * Timestamp-value-pairs for given day and sensor id
 * Example: ```$ curl http://localhost:5000/day/2021-10-10/47894774153498```
+
+#### range (```/range/{string:begin}/{string:end}/{int:sensor_id}```)
+* Timestamp-value-pairs for given time range and sensor id
+* Example: ```$ curl http://localhost:5000/range/2021-10-10T07:42:12/2021-10-10T12:06:52/47894774153498```
 
 Check the testing code in the ```tests/``` folder for examples
 on how to access the resources via the python module ```requests```
@@ -91,6 +95,6 @@ pip install waitress
 ```
 And run the app:
 ```
-waitress-serve --call 'flaskr:create_app'
+waitress-serve --call 'slowrest:create_app'
 ```
 Good luck!
