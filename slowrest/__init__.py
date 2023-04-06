@@ -31,9 +31,10 @@ def create_app(test_config=None):
 
     from slowrest import resources
     api.add_resource(resources.Index, "/")
-    api.add_resource(resources.Day, "/day/<string:day>/<int:sensor_id>")
     api.add_resource(resources.SensorDict, "/sensor-dict")
     api.add_resource(resources.SensorName, "/sensor-name/<int:sensor_id>")
+    api.add_resource(resources.Day, "/day/<string:day>/<int:sensor_id>")
+    api.add_resource(resources.Range, "/range/<string:begin>/<string:end>/<int:sensor_id>")
 
     return app
 

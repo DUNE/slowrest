@@ -2,7 +2,20 @@ from flask_restful import Resource
 from slowrest.db import get_db
 from slowrest import queries
 from slowrest import cache
-import datetime
+from datetime import datetime, timezone, timedelta
+
+
+def get_value_pair_dict(from_ts, to_ts, sensor_id) -> dict:
+    query = get_db().execute(
+        queries.value_pairs_time_range,
+        sensor_id=sensor_id, from_ts=from_ts, to_ts=to_ts
+    )
+    value_pair_dict = {}
+    for vp in query.fetchall():
+        dt = vp[0].replace(tzinfo=timezone.utc)
+        ts = round(dt.timestamp()*1000) # rounded to millisecond
+        value_pair_dict[ts] = vp[1]
+    return value_pair_dict
 
 
 class Index(Resource):
@@ -16,22 +29,19 @@ class Day(Resource):
     @staticmethod
     @cache.cached()
     def get(day, sensor_id) -> dict:
-        from_ts = datetime.datetime.strptime(day, '%Y-%m-%d')
-        to_ts = from_ts + datetime.timedelta(days=1)
-        res = get_db().execute(
-            queries.value_pairs_time_range,
-            sensor_id=sensor_id, from_ts=from_ts, to_ts=to_ts
-        )
-        return Day._get_value_pair_dict(res)
+        from_ts = datetime.fromisoformat(day).replace(tzinfo=timezone.utc)
+        to_ts = from_ts + timedelta(days=1)
+        return get_value_pair_dict(from_ts, to_ts, sensor_id)
 
+
+class Range(Resource):
+    """returns {'ts_1': value_1, 'ts_2': value_2, ...}"""
     @staticmethod
-    def _get_value_pair_dict(query_result) -> dict:
-        value_pair_dict = {}
-        for vp in query_result.fetchall():
-            dt = vp[0].replace(tzinfo=datetime.timezone.utc)
-            ts = round(dt.timestamp()*1000) # rounded to millisecond
-            value_pair_dict[ts] = vp[1]
-        return value_pair_dict
+    @cache.cached()
+    def get(begin, end, sensor_id) -> dict:
+        from_ts = datetime.fromisoformat(begin).replace(tzinfo=timezone.utc)
+        to_ts = datetime.fromisoformat(end).replace(tzinfo=timezone.utc)
+        return get_value_pair_dict(from_ts, to_ts, sensor_id)
 
 
 class SensorDict(Resource):
