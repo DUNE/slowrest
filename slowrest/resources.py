@@ -49,17 +49,10 @@ class SensorDict(Resource):
     @staticmethod
     @cache.cached()
     def get() -> dict:
-        res = get_db().execute(
+        query = get_db().execute(
             queries.sensor_id_name_pairs,
         )
-        return SensorDict._get_sensor_dict(res)
-
-    @staticmethod
-    def _get_sensor_dict(query_result) -> dict:
-        sensor_dict = {}
-        for pair in query_result.fetchall():
-            sensor_dict[pair[0]] = pair[1]
-        return sensor_dict
+        return dict(query.fetchall())
 
 
 class SensorName(Resource):
