@@ -37,7 +37,6 @@ class Day(Resource):
 class Range(Resource):
     """returns {'ts_1': value_1, 'ts_2': value_2, ...}"""
     @staticmethod
-    @cache.cached()
     def get(begin, end, sensor_id) -> dict:
         from_ts = datetime.fromisoformat(begin).replace(tzinfo=timezone.utc)
         to_ts = datetime.fromisoformat(end).replace(tzinfo=timezone.utc)
