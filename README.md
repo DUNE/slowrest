@@ -12,24 +12,24 @@ This read-only REST-API was developed to effectively access the in the DCS-DB.
 
 ### Setup
 Check out the code:
-```
-$ git clone ssh://git@gitlab.cern.ch:7999/ligerlac/slowrest.git
-$ cd slowrest/
+```shell
+git clone ssh://git@gitlab.cern.ch:7999/ligerlac/slowrest.git
+cd slowrest/
 ```
 Create a virtual environment, activate it and install dependencies
-```
-$ python -m venv venv/
-$ . venv/bin/activate
-$ pip install -r requirements.txt
+```shell
+python -m venv venv/
+. venv/bin/activate
+pip install -r requirements.txt
 ```
 Setup flask variables
-```
-$ export FLASK_APP=slowrest
-$ export FLASK_ENV=development
+```shell
+export FLASK_APP=slowrest
+export FLASK_ENV=development
 ```
 Run the application
-```
-$ flask run
+```shell
+flask run
 ```
 In case the ```flask``` command does not work, consider replacing it by
 ```python -m flask```. 
