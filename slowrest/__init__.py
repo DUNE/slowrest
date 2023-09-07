@@ -27,7 +27,9 @@ def create_app(test_config=None):
 
     # configure the DB queries
     from slowrest import queries
-    queries.prefix = app.config['experiment_prefix']
+    for name in [x for x in dir(queries) if not x.startswith("__")]:
+        q = getattr(queries, name).replace('__PREFIX__', app.config['prefix'])
+        setattr(queries, name, q)
 
     # configure cache
     cache.init_app(app, config={"CACHE_TYPE": "SimpleCache", "CACHE_DEFAULT_TIMEOUT": 300})
@@ -36,7 +38,6 @@ def create_app(test_config=None):
 
     from slowrest import resources
     api.add_resource(resources.Index, "/")
-
     api.add_resource(resources.SensorDict, "/sensor-dict")
     api.add_resource(resources.SensorName, "/sensor-name/<int:sensor_id>")
     api.add_resource(resources.Day, "/day/<string:day>/<int:sensor_id>")

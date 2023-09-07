@@ -1,20 +1,20 @@
 # get sensor name as function of sensor id
 sensor_name = '''
 SELECT ELEMENT_NAME
-FROM {prefix}.ELEMENTS
+FROM __PREFIX__.ELEMENTS
 WHERE ELEMENT_ID=:sensor_id
 '''
 
 # get [id, name] pairs for all sensors
 sensor_id_name_pairs = '''
 SELECT ELEMENT_ID, ELEMENT_NAME
-FROM {prefix}.ELEMENTS
+FROM __PREFIX__.ELEMENTS
 '''
 
 # get [timestamp, value] pairs as function of sensor id, from_ts and to_ts
 value_pairs_time_range = '''
 SELECT TS, VALUE_NUMBER
-FROM {prefix}.VEVENTSCREEN
+FROM __PREFIX__.VEVENTSCREEN
 WHERE ELEMENT_ID=:sensor_id
   AND TS > :from_ts and TS < :to_ts
 ORDER BY TS asc

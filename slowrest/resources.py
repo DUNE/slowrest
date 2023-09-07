@@ -3,13 +3,11 @@ from slowrest.db import get_db
 from slowrest import queries
 from slowrest import cache
 from datetime import datetime, timezone, timedelta
-from flask import current_app
 
 
 def get_value_pair_dict(from_ts, to_ts, sensor_id) -> dict:
     query = get_db().execute(
         queries.value_pairs_time_range,
-        prefix=current_app.config['experiment_prefix'],
         sensor_id=sensor_id, from_ts=from_ts, to_ts=to_ts
     )
     value_pair_dict = {}
@@ -51,7 +49,7 @@ class SensorDict(Resource):
     @cache.cached()
     def get() -> dict:
         query = get_db().execute(
-            queries.sensor_id_name_pairs.format(prefix=current_app.config['prefix'])
+            queries.sensor_id_name_pairs
         )
         return dict(query.fetchall())
 
