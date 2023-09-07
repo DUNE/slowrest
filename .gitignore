@@ -6,3 +6,6 @@ slowrest/config/conn.py
 slowrest.egg-info/
 build/
 dist/
+.env_np02
+.env_np04
+

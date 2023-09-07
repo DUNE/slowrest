@@ -8,7 +8,7 @@
 * [Future Plans](#futureplans)
 
 ### Introduction
-This read-only REST-API was developed to effectively access the in the DCS-DB.
+This read-only REST-API was developed to access the DCS-DB (a.k.a. Slow Controls Archive).
 
 ### Setup
 Check out the code:
@@ -22,14 +22,9 @@ python -m venv venv/
 . venv/bin/activate
 pip install -r requirements.txt
 ```
-Setup flask variables
+Run the application (in debug mode)
 ```shell
-export FLASK_APP=slowrest
-export FLASK_ENV=development
-```
-Run the application
-```shell
-flask run
+flask --app slowrest run --debug
 ```
 In case the ```flask``` command does not work, consider replacing it by
 ```python -m flask```. 
@@ -80,14 +75,17 @@ pip install slowrest-1.0.0-py3-none-any.whl
 Configure flask app:
 ```
 export FLASK_APP=slowrest
+export FLASK_credentials__user=my_user
+export FLASK_credentials__password=my_pw
+export FLASK_credentials__dsn=my_dsn
 ```
 Generate a secret key via 
 ```
 python -c 'import secrets; print(secrets.token_hex())'
 ```
-and copy the output to venv/var/slowrest-instance/config.py like so (example string):
+and add it to the config:
 ```
-SECRET_KEY = '192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf'
+export FLASK_SECRET_KEY='192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf'
 ```
 Install waitress
 ```

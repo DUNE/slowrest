@@ -3,7 +3,6 @@ import click
 from flask import current_app
 from flask import g
 from flask.cli import with_appcontext
-from slowrest.config import conn
 
 
 def get_db():
@@ -13,8 +12,9 @@ def get_db():
     for multithreading.
     """
     if "db" not in g:
+        print(current_app.config['credentials'])
         c = oracledb.connect(
-            user=conn.un, password=conn.pw, dsn=conn.cs
+            **current_app.config['credentials']
         )
         g.db = c.cursor()
     return g.db
