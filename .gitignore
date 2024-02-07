@@ -1,6 +1,8 @@
 *.pyc
 venv/
 .idea/
+*.swp
+.coverage
 instance/
 slowrest/config/conn.py
 slowrest.egg-info/

@@ -1,7 +1,6 @@
-pytest
-flask
-flask_restful
-flask_caching
-oracledb
-click
-wheel
+flask~=3.0.0
+flask_restful~=0.3.10
+flask_caching~=2.1.0
+oracledb~=2.0.0
+click~=8.1.7
+wheel~=0.42.0

@@ -12,7 +12,6 @@ def get_db():
     for multithreading.
     """
     if "db" not in g:
-        print(current_app.config['credentials'])
         c = oracledb.connect(
             **current_app.config['credentials']
         )

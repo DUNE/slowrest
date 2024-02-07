@@ -22,6 +22,10 @@ python -m venv venv/
 . venv/bin/activate
 pip install -r requirements.txt
 ```
+For development setup also install dev requirements.
+```shell
+pip install -r requirements-dev.txt
+```
 Run the application (in debug mode)
 ```shell
 flask --app slowrest run --debug
@@ -50,15 +54,31 @@ Several resources are available:
 * Timestamp-value-pairs for given time range and sensor id
 * Example: ```$ curl http://localhost:5000/range/2021-10-10T07:42:12/2021-10-10T12:06:52/47894774153498```
 
+#### latest (```/latest/{sensor_list_identifier}```)
+* Sensor list identifier found in sensor_lists folder filenames
+* Example: ```$ curl http://0.0.0.0:5000/latest/bellegarde```
+
 Check the testing code in the ```tests/``` folder for examples
 on how to access the resources via the python module ```requests```
 instead of ```curl```.
 
 
 ### Deployment
+
+Before actual deployment one needs to setup `sensor_lists` folder files.
+Assuming that you have a `sensor-ids.csv` file in the slowrest folder that 
+contains sensor_ids in the first column and webpage name in 
+the second run:
+
+```
+cat sensor-ids.csv | awk -F "," '{ print $1 > "sensor_lists/"$2}'
+```
+It will create files with names based on identifiers from second column and sensor_ids from the first column within the corresponding files. All files will be placed in the existing `sensor_lists` folder. Existing files will be overwritten.
+
 Assuming a suitable web server (e.g. Apache or nginx) is running
 and properly configured, the app can be deployed with the
 following steps. On the local (development) machine, run
+
 ```
 python setup.py bdist_wheel
 ```
@@ -95,4 +115,5 @@ And run the app:
 ```
 waitress-serve --call 'slowrest:create_app'
 ```
+
 Good luck!

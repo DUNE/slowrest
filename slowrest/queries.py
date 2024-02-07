@@ -5,6 +5,34 @@ FROM __PREFIX__.ELEMENTS
 WHERE ELEMENT_ID=:sensor_id
 '''
 
+# Latest entries for given set of element_ids
+sensors_current_value = '''
+    WITH RANKEDROWS AS (
+        SELECT
+            ELEMENT_ID,
+            VALUE_NUMBER,
+            TS,
+            ROW_NUMBER() OVER (
+                PARTITION BY ELEMENT_ID
+            ORDER BY
+                TS DESC
+            ) AS row_num
+        FROM
+            __PREFIX__.VEVENTSCREEN
+        WHERE
+            ELEMENT_ID IN ({})
+        AND TS >= (SYSDATE - 1/2)
+    )
+    SELECT
+        ELEMENT_ID,
+        VALUE_NUMBER,
+        TS
+    FROM
+        RANKEDROWS
+    WHERE
+        row_num = 1
+'''
+
 # get [id, name] pairs for all sensors
 sensor_id_name_pairs = '''
 SELECT ELEMENT_ID, ELEMENT_NAME
