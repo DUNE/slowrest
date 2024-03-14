@@ -13,7 +13,7 @@ This read-only REST-API was developed to access the DCS-DB (a.k.a. Slow Controls
 ### Setup
 Check out the code:
 ```shell
-git clone ssh://git@gitlab.cern.ch:7999/ligerlac/slowrest.git
+git clone git@github.com:DUNE/slowrest.git
 cd slowrest/
 ```
 Create a virtual environment, activate it and install dependencies
